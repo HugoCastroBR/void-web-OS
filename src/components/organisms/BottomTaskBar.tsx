@@ -1,5 +1,5 @@
 'use client '
-import React from 'react'
+import React, { useEffect } from 'react'
 import CustomText from '../atoms/CustomText'
 import Clock from '../molecules/Clock'
 import Image from 'next/image'
@@ -10,6 +10,7 @@ import useStore from '@/hooks/useStore'
 const BottomTaskBar = () => {
 
   const {states, dispatch} = useStore()
+
 
   return (
     <footer 

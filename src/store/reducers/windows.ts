@@ -8,7 +8,14 @@ export const WindowsSlice = createSlice({
       {
         title: "Console",
         icon: "/assets/icons/console-icon.png",
-        tabs: [] as tabStateProps[]
+        tabs: [] as tabStateProps[],
+        native: true
+      },
+      {
+        title: "Explorer",
+        icon: "/assets/icons/folder.png",
+        tabs: [] as tabStateProps[],
+        native: false
       }
     ] as windowStateProps[]
   

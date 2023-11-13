@@ -3,7 +3,7 @@ import useStore from '@/hooks/useStore'
 import React, { useEffect } from 'react'
 import Draggable from 'react-draggable'
 import CustomText from '../atoms/CustomText'
-import { ClearAllFocused, WindowRemoveTab, WindowSetTabFocused, WindowToggleMaximizeTab, WindowToggleMinimizeTab } from '@/store/actions'
+import { ClearAllFocused, MouseSetIsMouseInDesktop, MouseSetMousePath, WindowRemoveTab, WindowSetTabFocused, WindowToggleMaximizeTab, WindowToggleMinimizeTab } from '@/store/actions'
 import { windowStateProps, tabStateProps } from '@/types'
 
 export type WindowBoxProps = {
@@ -14,6 +14,7 @@ export type WindowBoxProps = {
   resizable?: boolean,
   currentWindow: windowStateProps 
   currentTab: tabStateProps 
+  onMouseEnter?: () => void
 }
 const WindowBox = ({
   title,
@@ -23,6 +24,7 @@ const WindowBox = ({
   className,
   currentWindow,
   currentTab,
+  onMouseEnter
 
 }: WindowBoxProps) => {
 
@@ -30,7 +32,7 @@ const WindowBox = ({
 
   const [isFocused, setIsFocused] = React.useState(false)
   
-
+  
 
   const MinimizeTab = () => {
     dispatch(WindowToggleMinimizeTab({
@@ -68,6 +70,13 @@ const WindowBox = ({
             uuid: currentTab?.uuid || '',
           }))
         }}
+        onMouseEnter={() => {
+          dispatch(MouseSetIsMouseInDesktop(false))
+          onMouseEnter && onMouseEnter()
+        }}
+        onMouseLeave={() => {
+          dispatch(MouseSetIsMouseInDesktop(true))
+        }}
         className={`
         absolute
         flex flex-col z-20
@@ -78,11 +87,12 @@ const WindowBox = ({
         rounded-md
         ${resizable && !currentTab?.maximized ? 'hover:resize' : ''}
         overflow-hidden
-        shadow-md 
+        shadow-md mt-4
         ${currentTab?.minimized ? 'hidden' : ''}
-        ${currentTab?.maximized ? '!w-screen !h-screen' : 'w-96 h-96'}
+        ${currentTab?.maximized ? '!w-screen !h-screen' : ''}
         ${currentTab?.focused ? 'z-30' : 'z-20'}
-        top-1/3 left-1/3 
+        ${currentTab?.maximized ? 'top-0 left-0' : ''}
+
       ${className}
       
     `}>
