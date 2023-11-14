@@ -28,3 +28,15 @@ export const removeExtension = (filename: string) => {
   return parts.join('.');
 }
 
+export const extractParentPath = (fullPath: string): string | null => {
+  const parts = fullPath.split('/');
+  
+  // Se houver pelo menos dois elementos no caminho, remova o último para obter o caminho pai
+  if (parts.length >= 2) {
+    parts.pop(); // Remove o último elemento
+    return parts.join('/');
+  }
+
+  return null;
+};
+
