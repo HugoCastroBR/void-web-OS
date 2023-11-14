@@ -63,6 +63,18 @@ const Explorer = ({
     Reload()
   }, [fs, currentPath,states.Mouse])
 
+  const uploadFileToDesktop = (fileName: string, fileContent: string) => {
+    const desktopPath = '/Desktop';
+  
+  
+    fs?.writeFile(`${desktopPath}/${fileName}`, fileContent, (err) => {
+      if (err) throw err;
+      console.log('File Saved!');
+    });
+  };
+
+
+
   return (
     <WindowBox
       currentTab={tab}
@@ -103,7 +115,21 @@ const Explorer = ({
         <div className='flex w-full h-5/6'>
           <div className='w-2/12 pt-2'>
             <Group justify="center">
-              <FileButton onChange={setFile} >
+              <FileButton onChange={async (e) => {
+                if(e){
+                  const file = e
+                  if(file.type === 'text/plain'){
+                    const fileContent = await file.text()
+                    uploadFileToDesktop(file.name, fileContent)
+                    Reload()
+                  }
+                  if(file.type === 'image/png' || file.type === 'image/jpeg' || file.type === 'image/jpg' || file.type === 'image/gif') {
+                    const fileContent = await file.arrayBuffer()
+                    const fileContentBase64 = Buffer.from(fileContent).toString('base64')
+                    uploadFileToDesktop(file.name, fileContentBase64)
+                  }
+                }
+              }} >
                 {(props) => <Button {...props}
                   className={`hover:bg-gray-700 transition-all duration-300 ease-in-out`}
                   styles={{
@@ -117,11 +143,6 @@ const Explorer = ({
                   }}
                 >Upload File</Button>}
               </FileButton>
-              {file && (
-                  <Text size="sm" ta="center" mt="sm">
-                    Picked file: {file.name}
-                  </Text>
-                )}
               <Button
                 onClick={() => {
                   setNewFileInputOpen(true)

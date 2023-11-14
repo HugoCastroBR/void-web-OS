@@ -75,7 +75,7 @@ const DirFolderItem = ({
         {icon && <Image src={icon} alt={title} width={48} height={48} />}
         <CustomText
           text={title}
-          className="break-words w-20 text-sm text-center"
+          className="break-words w-20 text-xs text-center"
         />
       </div>
     </>

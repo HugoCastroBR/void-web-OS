@@ -58,7 +58,19 @@ const DirFileItem = ({
               }
             }))
           }
-          return
+          if(extension === 'png' || extension === 'jpg' || extension === 'jpeg' || extension === 'gif'){
+            dispatch(WindowAddTab({
+              title: 'ImageReader',
+              tab: {
+                uuid: uuid(6),
+                title: 'ImageReader',
+                ficTitle: title,
+                maximized: false,
+                minimized: false,
+                value: path
+              }
+            }))
+          }
         }}
         className={`
         h-24 px-4
@@ -69,7 +81,7 @@ const DirFileItem = ({
         {icon && <Image src={icon} alt={title} width={48} height={48} />}
         <CustomText
           text={title}
-          className="break-words w-20 text-sm text-center"
+          className="break-words w-20 text-xs text-center"
         />
       </div>
     </>

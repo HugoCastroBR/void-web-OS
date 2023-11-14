@@ -1,8 +1,15 @@
+'use client'
 import React from 'react'
 import CustomText from '../atoms/CustomText'
 import Image from 'next/image'
 import { Menu, Button } from '@mantine/core'
+import useStore from '@/hooks/useStore'
+import { WindowAddTab } from '@/store/actions'
+import { uuid } from '@/utils/file'
 const StartMenu = () => {
+
+  const {states, dispatch} = useStore()
+
   return (
 
     <Menu 
@@ -77,20 +84,40 @@ const StartMenu = () => {
               padding: '0px',
               margin: '0px',
               height: '40px',
-              width: '98%',
-              marginLeft: '2%',
+              width: '100%',
               borderRadius: '0px',
               backdropFilter: 'blur(10px)',
             
             }
           }}
         >
-          <CustomText
-            text='Void Item'
-            className='text-white'
-          />
+          <div 
+            onClick={() => {
+              console.log('%cBottomTaskBar/Log: Explorer Clicked','color: cyan')
+              dispatch(WindowAddTab({
+                title: 'Explorer',
+                tab: {
+                  uuid: uuid(6),
+                  title: 'Explorer',
+                  maximized: false,
+                  minimized: false,
+                  value: '/Desktop'
+                }
+              }))
+            }}
+            className='
+            pl-2
+            flex items-center w-full h-10 bg-gray-800
+            hover:bg-gray-600 transition-all duration-300 ease-in-out
+            '
+          >
+            <CustomText
+              text='Explorer'
+              className='text-white'
+            />
+          </div>
         </Menu.Item>
-
+          
 
 
       </Menu.Dropdown>

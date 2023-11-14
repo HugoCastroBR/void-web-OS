@@ -17,6 +17,7 @@ import DirFolderItem from '../native/DirFolderItem'
 import NewDirFolderItem from '../native/NewDirFolderItem'
 import NewDirFileItem from '../native/NewDirFileItem'
 import Notepad from '../native/Notepad'
+import ImageReader from '../native/ImageReader'
 const DesktopView = () => {
 
   const {states, dispatch} = useStore()
@@ -90,7 +91,7 @@ const DesktopView = () => {
             {icon && <Image src={icon} alt={title} width={48} height={48} />}
             <CustomText
               text={title}
-              className="break-words w-20 text-sm text-center"
+              className="break-words w-20 text-xs text-center"
             />
           </div>
         </>
@@ -141,6 +142,18 @@ const DesktopView = () => {
                 window={window}
               />
             )
+          }
+          {
+            if(tab.title === 'ImageReader'){
+              return (
+                <ImageReader
+                  path={tab?.value || '/'}
+                  tab={tab}
+                  key={index}
+                  window={window}
+                />
+              )
+            }
           }
           
         })

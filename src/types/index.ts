@@ -107,3 +107,7 @@ export type mouseContextMenuOptionsProps = {
 export type NotePadProps = nativeWindowProps & {
   path: string
 }
+
+export type ImageReaderProps = nativeWindowProps & {
+  path: string
+}

@@ -44,7 +44,7 @@ const NewDirFileItem = ({
       >
         {icon && <Image src={icon} alt={title} width={48} height={48} />}
         <input 
-          className="w-16 h-6 bg-gray-800 text-white text-sm outline-none text-center "
+          className="w-16 h-6 bg-gray-800 text-white text-xs outline-none text-center "
           onChange={(e) => setInputValue(e.target.value)}
           autoFocus
           value={inputValue}
