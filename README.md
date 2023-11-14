@@ -58,7 +58,7 @@ O Void Web OS utiliza as seguintes dependências principais:
 
 ## **Bugs Conhecidos**
 
-Atualmente, algumas ações realizadas por meio da interface gráfica podem resultar em comportamento inesperado. Estamos trabalhando ativamente na resolução desses problemas. Se você encontrar algum bug, sinta-se à vontade para relatá-lo [aqui](https://github.com/seu-usuario/void-web-os/issues).
+Atualmente, algumas ações realizadas por meio da interface gráfica podem resultar em comportamento inesperado. Estamos trabalhando ativamente na resolução desses problemas. Se você encontrar algum bug, sinta-se à vontade para relatá-lo [aqui](https://github.com/HugoCastroBR/void-web-OS/issues).
 
 ## **Contribuições**
 

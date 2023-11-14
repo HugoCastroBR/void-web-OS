@@ -1,5 +1,5 @@
 import { tabStateProps, windowStateProps } from '@/types';
-import { AppActions,WindowsActions,MouseActions } from './index';
+import { AppActions,WindowsActions,MouseActions, CustomSystemActions } from './index';
 
 
 
@@ -79,4 +79,17 @@ export const MouseSetMouseContextPath = (payload:string | undefined) => {
 }
 export const MouseSetCutItemsPath = (payload:string[]) => {
   return MouseActions.SET_CUT_ITEMS_PATH(payload)
+}
+export const MouseSetIsRenaming = (payload:boolean) => {
+  return MouseActions.SET_IS_RENAMING(payload)
+}
+
+export const CustomSystemSetBackground = (payload:string | null) => {
+  return CustomSystemActions.SET_BACKGROUND(payload)
+}
+export const CustomSystemSetConsoleColor = (payload:string) => {
+  return CustomSystemActions.SET_CONSOLE_COLOR(payload)
+}
+export const CustomSystemSetConsoleOpacity = (payload:number) => {
+  return CustomSystemActions.SET_CONSOLE_OPACITY(payload)
 }

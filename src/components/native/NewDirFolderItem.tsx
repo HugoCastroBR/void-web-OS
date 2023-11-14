@@ -28,7 +28,6 @@ const NewDirFolderItem = ({
   const [inputValue, setInputValue] = useState('')
 
 
-
   return (
     <>
       <div

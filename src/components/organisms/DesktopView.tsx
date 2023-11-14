@@ -104,7 +104,7 @@ const DesktopView = () => {
 
 
   return (
-    <div className='bg-gray-800 h-full z-10  '
+    <div className='bg-transparent h-full z-10  '
       onDoubleClick={
         () => {
           dispatch(MouseClearSelectedItems())

@@ -39,6 +39,7 @@ const StartMenu = () => {
             className='
           flex items-center w-24 bg-gray-800
           justify-between px-2 h-full cursor-pointer
+          mr-px
           '
             onClick={() => {
               console.log('%cBottomTaskBar/Log: Start Menu Clicked','color: cyan')

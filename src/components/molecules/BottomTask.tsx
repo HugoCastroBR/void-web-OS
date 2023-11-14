@@ -3,6 +3,7 @@ import React from 'react'
 import CustomText from '../atoms/CustomText'
 import useStore from '@/hooks/useStore'
 import { ClearAllFocused, WindowSetTabFocused, WindowToggleMinimizeTab } from '@/store/actions'
+import { getExtension, verifyIfIsFile } from '@/utils/file'
 
 
 export type BottomTaskProps = {
@@ -15,6 +16,7 @@ const BottomTask = ({
 }:BottomTaskProps) => {
 
   const {states, dispatch} = useStore()
+  const [extension, setExtension] = React.useState(getExtension(title))
 
   const ToggleMinimizeTab= () => {
     const currentWindow = states.Windows.windows.find(window => window.tabs.find(tab => tab.uuid === uuid))
@@ -33,17 +35,82 @@ const BottomTask = ({
       }))
     }
   }
+
+
   
+  const GenerateIcon = () => {
+    if(verifyIfIsFile(title)){
+      switch(extension){
+        case 'txt':
+          return (
+            <span className='i-mdi-file-document text-white text-xl' ></span>
+          )
+        case 'gif':
+          return (
+            <span className='i-mdi-gif text-white text-xl' ></span>
+          )
+        case 'jpg':
+          return (
+            <span className='i-mdi-image text-white text-xl' ></span>
+          )
+        case 'png':
+          return (
+            <span className='i-mdi-image text-white text-xl' ></span>
+          )
+        case 'jpeg':
+          return (
+            <span className='i-mdi-image text-white text-xl' ></span>
+          )
+  
+        default:
+          return (
+            <span className='i-mdi-file text-white text-xl' ></span>
+          )
+      }
+    }else{
+      switch(title){
+        case 'Explorer':
+          return (
+            <span className='i-mdi-folder-open text-white text-xl' ></span>
+          )
+        case 'NotePad':
+          return (
+            <span className='i-mdi-file-document text-white text-xl' ></span>
+          )
+        case 'Console':
+          return (
+            <span className='i-mdi-console text-white text-xl' ></span>
+          )
+        case 'ImageReader':
+          return (
+            <span className='i-mdi-image text-white text-xl' ></span>
+          )
+        default:
+          return (
+            <span className='i-mdi-folder-open text-white text-xl' ></span>
+          )
+      }
+    }
+    
+  }
+
+
+
   return (
     <div 
     onClick={ToggleMinimizeTab}
     className='
     flex justify-between items-center
-    w-24 h-full bg-gray-800 px-2 py-1
+    w-32 min-w-max
+    h-10 bg-gray-800 px-2 py-1
     cursor-pointer hover:bg-gray-700
     transition duration-300 ease-in-out
+    mt-0.5 mx-px
     '>
-      <CustomText text={title}/>
+      <GenerateIcon/>
+      <CustomText 
+      className='text-xs text-white'
+      text={title}/>
     </div>
   )
 }

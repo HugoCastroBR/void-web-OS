@@ -27,10 +27,6 @@ const NewDirFileItem = ({
   const { states, dispatch } = useStore()
   const [inputValue, setInputValue] = useState('')
 
-  useEffect(() => {
-    console.log('path:', states.Mouse.mousePath)
-  }, [states.Mouse.mousePath])
-
   return (
     <>
       <div

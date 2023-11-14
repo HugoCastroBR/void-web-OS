@@ -14,6 +14,7 @@ export const MouseSlice = createSlice({
     copyItemsPath: [] as string[] ,
     mouseContextPath: undefined,
     cutItemsPath: [] as string[],
+    isRenaming: false,
   } as mouseContextProps,
   reducers: {
     SET_MOUSE_IN_DESKTOP(state, { payload }: { payload: boolean }) {
@@ -54,5 +55,8 @@ export const MouseSlice = createSlice({
     SET_CUT_ITEMS_PATH(state, { payload }: { payload: string[] }) {
       state.cutItemsPath = payload;
     },
+    SET_IS_RENAMING(state, { payload }: { payload: boolean }) {
+      state.isRenaming = payload;
+    }
   }
 });

@@ -21,13 +21,13 @@ export const WindowsSlice = createSlice({
         title: "NotePad",
         icon: "/assets/icons/txt.png",
         tabs: [] as tabStateProps[],
-        native: true
+        native: false
       },
       {
         title: "ImageReader",
         icon: "/assets/icons/image.png",
         tabs: [] as tabStateProps[],
-        native: true
+        native: false
       }
     ] as windowStateProps[]
   
