@@ -10,6 +10,7 @@ export type RightMenuItemProps = {
 export type tabStateProps = {
   uuid: string
   title?: string
+  ficTitle?: string
   maximized: boolean
   minimized: boolean
   focused?: boolean
@@ -90,8 +91,10 @@ export type mouseContextProps = {
   mouseOverItem?: string | undefined
   newFolder?: boolean
   newFile?: boolean
-  mouseMovingPath?: string
-  mouseStopMovingPath?: string
+  copyItemsPath?: string[]
+  cutItemsPath?: string[]
+  mouseContextPath?: string
+
 }
 
 export type mouseContextMenuOptionsProps = {

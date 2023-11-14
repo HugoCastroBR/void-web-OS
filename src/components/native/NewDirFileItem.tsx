@@ -36,7 +36,7 @@ const NewDirFileItem = ({
       <div
 
         className={`
-        h-28 px-4
+        h-24 px-4
         flex flex-col justify-evenly items-center cursor-pointer
         hover:bg-gray-600 transition-all duration-300 ease-in-out
         bg-gray-600
@@ -44,23 +44,20 @@ const NewDirFileItem = ({
       >
         {icon && <Image src={icon} alt={title} width={48} height={48} />}
         <input 
-          className="w-14 h-6 bg-gray-800 text-white text-sm outline-none text-center "
+          className="w-16 h-6 bg-gray-800 text-white text-sm outline-none text-center "
           onChange={(e) => setInputValue(e.target.value)}
           autoFocus
           value={inputValue}
           onKeyPress={(e) => {
-            console.log(`${states.Mouse.mousePath}/${inputValue}`)
             if(!inExplorer){
               if (e.key === 'Enter') {
                 fs?.writeFile(`${states.Mouse.mousePath}/${inputValue}`, '', () => {
-                  console.log('created');
                   dispatch(MouseSetNewFile(false))
                 })
               }
             }else{
               if (e.key === 'Enter') {
                 fs?.writeFile(`${inExplorerPath}/${inputValue}`, '', () => {
-                  console.log('created');
                   inExplorerCB && inExplorerCB()
                 })
               }

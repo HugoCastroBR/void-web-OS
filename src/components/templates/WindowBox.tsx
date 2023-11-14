@@ -12,9 +12,15 @@ export type WindowBoxProps = {
   className?: string
   children?: React.ReactNode
   resizable?: boolean,
-  currentWindow: windowStateProps 
-  currentTab: tabStateProps 
-  onMouseEnter?: () => void
+  currentWindow: windowStateProps
+  currentTab: tabStateProps
+  onMouseEnter?: () => void,
+  onMouseLeave?: () => void
+  onMouseMove?: () => void
+  customClose?: () => void
+  disableClose?: boolean
+  disableMinimize?: boolean
+  disableMaximize?: boolean
 }
 const WindowBox = ({
   title,
@@ -24,21 +30,31 @@ const WindowBox = ({
   className,
   currentWindow,
   currentTab,
-  onMouseEnter
+  onMouseEnter,
+  onMouseLeave,
+  onMouseMove,
+  customClose,
+  disableClose,
+  disableMinimize,
+  disableMaximize
 
 }: WindowBoxProps) => {
 
   const { states, dispatch } = useStore()
 
   const [isFocused, setIsFocused] = React.useState(false)
-  
-  
+
+
 
   const MinimizeTab = () => {
+
+
     dispatch(WindowToggleMinimizeTab({
       title: currentWindow?.title || '',
       uuid: currentTab?.uuid || '',
     }))
+
+
   }
   const MaximizeTab = () => {
     dispatch(WindowToggleMaximizeTab({
@@ -48,10 +64,15 @@ const WindowBox = ({
   }
 
   const CloseTab = () => {
-    dispatch(WindowRemoveTab({
-      title: currentWindow?.title || '',
-      uuid: currentTab?.uuid || '',
-    }))
+    if (customClose) {
+      customClose()
+    } else {
+      dispatch(WindowRemoveTab({
+        title: currentWindow?.title || '',
+        uuid: currentTab?.uuid || '',
+      }))
+    }
+
   }
 
 
@@ -76,6 +97,10 @@ const WindowBox = ({
         }}
         onMouseLeave={() => {
           dispatch(MouseSetIsMouseInDesktop(true))
+          onMouseLeave && onMouseLeave()
+        }}
+        onMouseMove={() => {
+          onMouseMove && onMouseMove()
         }}
         className={`
         absolute
@@ -109,16 +134,19 @@ const WindowBox = ({
           }
         >
           <div>
-            <CustomText text={title} />
+            <CustomText text={currentTab.ficTitle || title} />
           </div>
           <div className='flex'>
             <div
               onClick={MinimizeTab}
-              className='w-6 h-6 m-px border border-gray-700 
+              className={`
+              ${!disableMinimize ? '' : 'hidden'}
+              w-6 h-6 m-px border border-gray-700 
               cursor-pointer flex justify-center items-center
-            hover:bg-gray-700 hover:border-gray-600
+             hover:bg-gray-700 hover:border-gray-600
               transition-all duration-300 ease-in-out
-        '>
+        
+              `}>
               <span
                 className='i-mdi-minimize text-white
           '>
@@ -127,11 +155,13 @@ const WindowBox = ({
             </div>
             <div
               onClick={MaximizeTab}
-              className='w-6 h-6 m-px border border-gray-700 
+              className={`
+              ${!disableMaximize ? '' : 'hidden'}
+              w-6 h-6 m-px border border-gray-700 
               cursor-pointer flex justify-center items-center
-            hover:bg-gray-700 hover:border-gray-600
+              hover:bg-gray-700 hover:border-gray-600
               transition-all duration-300 ease-in-out
-        '>
+              `}>
               <span
                 className='i-mdi-maximize text-white
           '>
@@ -140,11 +170,13 @@ const WindowBox = ({
             </div>
             <div
               onClick={CloseTab}
-              className='w-6 h-6 m-px border border-gray-700 
+              className={`
+              ${!disableClose ? '' : 'hidden'}
+              w-6 h-6 m-px border border-gray-700 
               cursor-pointer flex justify-center items-center
-            hover:bg-gray-700 hover:border-gray-600
+              hover:bg-gray-700 hover:border-gray-600
               transition-all duration-300 ease-in-out
-        '>
+              `}>
               <span
                 className='i-mdi-close text-white
           '>

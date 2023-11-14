@@ -32,7 +32,7 @@ const BottomTaskBar = () => {
                 <BottomTask
                   key={tab.uuid}
                   uuid={tab.uuid}
-                  title={tab.title || window.title}
+                  title={tab.ficTitle || tab.title || window.title}
                 />
               )
             })

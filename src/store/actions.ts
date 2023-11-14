@@ -68,12 +68,15 @@ export const MouseSetMouseOverItem = (payload:string | undefined) => {
 export const MouseSetNewFolder = (payload:boolean) => {
   return MouseActions.SET_NEW_FOLDER(payload)
 }
-export const MouseSetMouseMovingPath = (payload:string | undefined) => {
-  return MouseActions.SET_MOUSE_MOVING_PATH(payload)
-}
-export const MouseSetMouseStopMovingPath = (payload:string | undefined) => {
-  return MouseActions.SET_MOUSE_STOP_MOVING_PATH(payload)
-}
 export const MouseSetNewFile = (payload:boolean) => {
   return MouseActions.SET_NEW_FILE(payload)
+}
+export const MouseSetCopyItemsPath = (payload:string[]) => {
+  return MouseActions.SET_COPY_ITEMS_PATH(payload)
+}
+export const MouseSetMouseContextPath = (payload:string | undefined) => {
+  return MouseActions.SET_MOUSE_CONTEXT_PATH(payload)
+}
+export const MouseSetCutItemsPath = (payload:string[]) => {
+  return MouseActions.SET_CUT_ITEMS_PATH(payload)
 }

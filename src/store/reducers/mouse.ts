@@ -11,8 +11,9 @@ export const MouseSlice = createSlice({
     mouseOverItem: undefined,
     newFolder: false,
     mouseMovingPath: undefined,
-    mouseStopMovingPath: undefined,
-    newFile: false,
+    copyItemsPath: [] as string[] ,
+    mouseContextPath: undefined,
+    cutItemsPath: [] as string[],
   } as mouseContextProps,
   reducers: {
     SET_MOUSE_IN_DESKTOP(state, { payload }: { payload: boolean }) {
@@ -41,14 +42,17 @@ export const MouseSlice = createSlice({
     SET_NEW_FOLDER(state, { payload }: { payload: boolean }) {
       state.newFolder = payload;
     },
-    SET_MOUSE_MOVING_PATH(state, { payload }: { payload: string | undefined }) {
-      state.mouseMovingPath = payload;
-    },
-    SET_MOUSE_STOP_MOVING_PATH(state, { payload }: { payload: string | undefined }) {
-      state.mouseStopMovingPath = payload;
-    },
     SET_NEW_FILE(state, { payload }: { payload: boolean }) {
       state.newFile = payload;
+    },
+    SET_COPY_ITEMS_PATH(state, { payload }: { payload: string[] }) {
+      state.copyItemsPath = payload;
+    },
+    SET_MOUSE_CONTEXT_PATH(state, { payload }: { payload: string | undefined }) {
+      state.mouseContextPath = payload;
+    },
+    SET_CUT_ITEMS_PATH(state, { payload }: { payload: string[] }) {
+      state.cutItemsPath = payload;
     },
   }
 });

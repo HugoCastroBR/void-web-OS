@@ -66,7 +66,7 @@ const DirFolderItem = ({
           dispatch(MouseSetMouseOverItem(undefined))
         }}
         className={`
-        h-28 px-4
+        h-24 px-4
         flex flex-col justify-evenly items-center cursor-pointer
         hover:bg-gray-600 transition-all duration-300 ease-in-out
         ${isItemSelected ? 'bg-gray-600' : ''}
@@ -75,6 +75,7 @@ const DirFolderItem = ({
         {icon && <Image src={icon} alt={title} width={48} height={48} />}
         <CustomText
           text={title}
+          className="break-words w-20 text-sm text-center"
         />
       </div>
     </>

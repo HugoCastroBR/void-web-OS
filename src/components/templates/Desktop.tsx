@@ -6,13 +6,14 @@ import useFS from '@/hooks/useFS'
 import { Loader } from '@mantine/core'
 import CustomText from '../atoms/CustomText'
 import useStore from '@/hooks/useStore'
-import {mouseContextMenuOptionsProps} from '@/types'
-import { MouseClearSelectedItems, MouseSetNewFile, MouseSetNewFolder, WindowAddTab } from '@/store/actions'
+import { mouseContextMenuOptionsProps } from '@/types'
+import { MouseClearSelectedItems, MouseSetCopyItemsPath, MouseSetCutItemsPath, MouseSetNewFile, MouseSetNewFolder, WindowAddTab } from '@/store/actions'
 import { uuid, verifyIfIsFile } from '@/utils/file'
+
 const Desktop = () => {
 
   const { states, dispatch } = useStore()
-  const {fs} = useFS()
+  const { fs } = useFS()
 
 
 
@@ -45,7 +46,7 @@ const Desktop = () => {
   const [isRightMenuOpen, setIsRightMenuOpen] = React.useState(false)
   const [x, setX] = React.useState(0)
   const [y, setY] = React.useState(0)
- 
+
 
 
   const MouseOption = ({
@@ -53,11 +54,11 @@ const Desktop = () => {
     title,
     onClick,
     disabled,
-  }:mouseContextMenuOptionsProps) => {
-    return(
+  }: mouseContextMenuOptionsProps) => {
+    return (
       <div
         onClick={(e) => {
-          if(disabled) return
+          if (disabled) return
           e.preventDefault()
           onClick && onClick()
         }}
@@ -66,7 +67,7 @@ const Desktop = () => {
         transition-all duration-300 ease-in-out cursor-pointer pl-1
         w-44 h-6
         `}
-        >
+      >
         <span className={`${className} text-lg`}></span>
         <CustomText
           className='ml-1'
@@ -77,80 +78,80 @@ const Desktop = () => {
   }
 
   const MouseOptionOpen = () => {
-    return(
+    return (
       <MouseOption
-          title='Open'
-          disabled={states.Mouse.selectedItems.length === 0}
-          onClick={() => {
-            states.Mouse.selectedItems.forEach((item) => {
-              if(verifyIfIsFile(item)){
-                console.log('open file')
-              }else{
-                console.log('open folder')
-                dispatch(WindowAddTab({
+        title='Open'
+        disabled={states.Mouse.selectedItems.length === 0}
+        onClick={() => {
+          states.Mouse.selectedItems.forEach((item) => {
+            if (verifyIfIsFile(item)) {
+              console.log('open file')
+            } else {
+              console.log('open folder')
+              dispatch(WindowAddTab({
+                title: 'Explorer',
+                tab: {
+                  uuid: uuid(6),
                   title: 'Explorer',
-                  tab: {
-                    uuid: uuid(6),
-                    title: 'Explorer',
-                    maximized: false,
-                    minimized: false,
-                    value: item
-                  }
-                }))
-              }
-              dispatch(MouseClearSelectedItems())
-            })
-          }}
-          className='i-mdi-open-in-app'
-        />
+                  maximized: false,
+                  minimized: false,
+                  value: item
+                }
+              }))
+            }
+            dispatch(MouseClearSelectedItems())
+          })
+        }}
+        className='i-mdi-open-in-app'
+      />
     )
   }
 
   const MouseOptionDelete = () => {
-    return(
+    return (
       <MouseOption
-          title='Delete'
-          disabled={states.Mouse.selectedItems.length === 0}
-          onClick={() => {
-            states.Mouse.selectedItems.forEach((item) => {
-              if(verifyIfIsFile(item)){
-                fs?.unlink(item, (err) => {
-                  if(err){
-                    fs?.rmdir(item, (err) => {
-                      if(err) throw err
-                      console.log('deleted folder');
-                    })
-                  }else{
-                    console.log('deleted file');
-                  }
-                  
-                })
-              }else{
-                fs?.rmdir(item, (err) => {
-                  if(err) {
-                    fs?.unlink(item, (err) => {
-                      if(err) throw err
-                      console.log('deleted file');
-                    })
-                  }else{
+        title='Delete'
+        disabled={states.Mouse.selectedItems.length === 0}
+        onClick={() => {
+          states.Mouse.selectedItems.forEach((item) => {
+            if (verifyIfIsFile(item)) {
+              fs?.unlink(item, (err) => {
+                if (err) {
+                  fs?.rmdir(item, (err) => {
+                    if (err) throw err
                     console.log('deleted folder');
-                  }
-                  
-                
-                })
-              }
-              dispatch(MouseClearSelectedItems())
-            })
-          }}
-          className='i-mdi-delete'
-        />
+                  })
+                } else {
+                  console.log('deleted file');
+                }
+
+              })
+            } else {
+              fs?.rmdir(item, (err) => {
+                if (err) {
+                  fs?.unlink(item, (err) => {
+                    if (err) throw err
+                    console.log('deleted file');
+                  })
+                } else {
+                  console.log('deleted folder');
+                }
+
+
+              })
+            }
+            dispatch(MouseClearSelectedItems())
+          })
+        }}
+        className='i-mdi-delete'
+      />
     )
   }
 
-  const MouseOptionNewFolder= () => {
+  const MouseOptionNewFolder = () => {
 
 
-    return(
+    return (
       <>
         <MouseOption
           title='New Desktop Folder'
@@ -165,10 +166,98 @@ const Desktop = () => {
     )
   }
 
-  const MouseOptionNewFile= () => {
 
 
-    return(
+  const MouseOptionCut = () => {
+
+
+    return (
+      <>
+        <MouseOption
+          title='Cut'
+          disabled={states.Mouse.selectedItems.length === 0}
+          onClick={() => {
+            dispatch(MouseSetCutItemsPath(states.Mouse.selectedItems))
+            dispatch(MouseSetCopyItemsPath([]))
+
+          }}
+          className='i-mdi-content-cut'
+        />
+      </>
+    )
+  }
+
+  const MouseOptionCopy= () => {
+
+
+    return (
+      <>
+        <MouseOption
+          title='Copy'
+          disabled={states.Mouse.selectedItems.length === 0}
+          onClick={() => {
+            dispatch(MouseSetCopyItemsPath(states.Mouse.selectedItems))
+            dispatch(MouseSetCutItemsPath([]))
+          }}
+          className='i-mdi-content-copy'
+        />
+      </>
+    )
+  }
+
+
+  const MouseOptionPaste = () => {
+
+
+    return (
+      <>
+        <MouseOption
+          title='Paste'
+          disabled={states.Mouse.cutItemsPath?.length === 0}
+          onClick={async () => {
+            try {
+              console.log(states.Mouse.mouseContextPath);
+              const destinationPath = states.Mouse.mouseContextPath;
+
+              for (const item of states.Mouse.cutItemsPath || []) {
+                console.log('move From:', item);
+                console.log('move To:', destinationPath);
+                fs?.rename(item, `${destinationPath}/${item.split('/').pop()}`, (err) => {
+                  if (err) throw err
+                  console.log('moved');
+                })
+                // console.log(res);
+              }
+            } catch (error) {
+              console.error('Error:', error);
+            }
+            // states.Mouse.copyItemsPath?.forEach((item) => {
+            //   const itemToCopy = item;
+            //   const pathToCopy = states.Mouse.mouseContextPath;    
+            //   console.log('copy From:', itemToCopy);
+            //   console.log('copy To:', pathToCopy);  
+            //   if(verifyIfIsFile(itemToCopy)){
+            //     fs?.writeFile(`/${pathToCopy}/${itemToCopy}`, '', (err) => {
+            //       if(!err){
+            //         console.log(`%cFile '${itemToCopy}' copied to '${pathToCopy}'`, 'color: green');
+            //       }
+            //       else{
+            //         console.log(`%cError: ${err}`, 'color: red');
+            //       }
+            //     })
+            //   }
+            // })
+          }}
+          className='i-mdi-content-paste'
+        />
+      </>
+    )
+  }
+
+  const MouseOptionNewFile = () => {
+
+
+    return (
       <>
         <MouseOption
           title='New File'
@@ -201,12 +290,12 @@ const Desktop = () => {
         }}
       >
         <MouseOptionOpen />
-        {
-          states.Mouse.mousePath === '/Desktop' &&
-          <MouseOptionNewFolder />
-        }
-        <MouseOptionDelete />
+        {/* <MouseOptionCopy /> */}
+        <MouseOptionCut />
+        <MouseOptionPaste />
+        <MouseOptionNewFolder />
         <MouseOptionNewFile />
+        <MouseOptionDelete />
       </div>
     )
   }

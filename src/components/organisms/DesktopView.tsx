@@ -16,6 +16,7 @@ import DirFileItem from '../native/DirFileItem'
 import DirFolderItem from '../native/DirFolderItem'
 import NewDirFolderItem from '../native/NewDirFolderItem'
 import NewDirFileItem from '../native/NewDirFileItem'
+import Notepad from '../native/Notepad'
 const DesktopView = () => {
 
   const {states, dispatch} = useStore()
@@ -82,13 +83,14 @@ const DesktopView = () => {
             }))
           }}
           className='
-          h-28 px-4
+          h-24 px-4
           flex flex-col justify-evenly items-center cursor-pointer
           hover:bg-gray-600 transition-all duration-300 ease-in-out
           '>
             {icon && <Image src={icon} alt={title} width={48} height={48} />}
             <CustomText
               text={title}
+              className="break-words w-20 text-sm text-center"
             />
           </div>
         </>
@@ -130,10 +132,20 @@ const DesktopView = () => {
               />
             )
           }
+          if(tab.title === 'NotePad'){
+            return (
+              <Notepad
+                path={'/Desktop'}
+                tab={tab}
+                key={index}
+                window={window}
+              />
+            )
+          }
           
         })
       })}
-      <SimpleGrid cols={20} spacing="1px" verticalSpacing="1px">
+      <SimpleGrid cols={20} spacing="2px" verticalSpacing="2px">
         {states.Windows.windows.map((window,index) => {
           if(window.native){
             return (

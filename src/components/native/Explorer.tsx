@@ -11,7 +11,7 @@ import { generateIcon } from '@/utils/icons'
 import DirFileItem from './DirFileItem'
 import DirFolderItem from './DirFolderItem'
 import useStore from '@/hooks/useStore'
-import { MouseSetMousePath } from '@/store/actions'
+import { MouseSetMouseContextPath, MouseSetMousePath } from '@/store/actions'
 import NewDirFileItem from './NewDirFileItem'
 import NewDirFolderItem from './NewDirFolderItem'
 
@@ -70,7 +70,17 @@ const Explorer = ({
       title='Explorer'
       uuid={tab.uuid}
       onMouseEnter={() => {
-        dispatch(MouseSetMousePath(currentPath))
+        console.log('mouse enter explorer')
+        dispatch(MouseSetMousePath(tab.value || '/'))
+        dispatch(MouseSetMouseContextPath(tab.value || '/'))
+      }}
+      onMouseMove={() => {
+        dispatch(MouseSetMouseContextPath(`${currentPath}/`))
+      
+      }}
+      onMouseLeave={() => {
+        dispatch(MouseSetMousePath('/Desktop'))
+        dispatch(MouseSetMouseContextPath('Desktop'))
       }}
       resizable
       className='w-3/5 h-3/5 flex flex-col '
