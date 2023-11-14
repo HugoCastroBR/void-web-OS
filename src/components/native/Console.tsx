@@ -17,6 +17,44 @@ const [CommandHistory, setCommandHistory] = React.useState<string[]>([]);
 const [currentDirectory, setCurrentDirectory] = React.useState<string>('/');
 const [DirectoryHistory, setDirectoryHistory] = React.useState<string[]>([]);
 
+const availableCommands: string[] = [
+  'ls',
+  'cd',
+  'mkdir',
+  'touch',
+  'rm',
+  'clear',
+  'cls',
+  'rename',
+  'mv',
+];
+
+const handleTabPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+  if (e.key === 'Tab') {
+    e.preventDefault();
+    autoCompleteCommand();
+  }
+};
+
+const autoCompleteCommand = () => {
+  const partialCommand = input.split(' ').pop();
+  const matchingCommand = availableCommands.find((cmd) =>
+    cmd.startsWith(partialCommand || '')
+  );
+
+  if (matchingCommand) {
+    const updatedInput = input.replace(
+      new RegExp(`${partialCommand}$`),
+      matchingCommand
+    );
+    setInput(updatedInput);
+  }
+};
+
+const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  setInput(e.target.value);
+};
+
 const consoleCommands: consoleCommandProps[] = [
   {
     command: 'ls',
@@ -70,6 +108,38 @@ const consoleCommands: consoleCommandProps[] = [
       fs?.mkdir(path, () => {
         console.log(`%cFolder '${folderName}' created`, 'color: green');
       });
+    },
+  },
+  {
+    command: 'rename',
+    description: 'Rename a file or folder',
+    callback: ({params}) => {
+      const [oldName, newName] = params;
+      fs?.rename(`${currentDirectory}/${oldName}`, `${currentDirectory}/${newName}`, (err) => {
+        if(!err){
+          console.log(`%c'${oldName}' renamed to '${newName}'`, 'color: green');
+          setCommandHistory([...CommandHistory, `'${oldName}' renamed to '${newName}'`]);
+        }
+        else{
+          console.log(`%cError: ${err}`, 'color: red');
+        }
+      })
+    },
+  },
+  {
+    command: 'mv',
+    description: 'Move a file or folder',
+    callback: ({params}) => {
+      const [itemToMove, pathToMove] = params;
+      fs?.rename(`${currentDirectory}/${itemToMove}`, `${currentDirectory}/${pathToMove}/${itemToMove}`, (err) => {
+        if(!err){
+          console.log(`%c'${itemToMove}' moved to '${pathToMove}'`, 'color: green');
+          setCommandHistory([...CommandHistory, `'${itemToMove}' moved to '${pathToMove}'`]);
+        }
+        else{
+          console.log(`%cError: ${err}`, 'color: red');
+        }
+      })
     },
   },
   {
@@ -129,6 +199,15 @@ const consoleCommands: consoleCommandProps[] = [
             setCommandHistory([...CommandHistory, `Folder '${itemToRemove}' removed`]);
           }
           else{
+            fs?.unlink(`${currentDirectory}/${itemToRemove}`, (err) => {
+              if(!err){
+                console.log(`%cFile '${itemToRemove}' removed`, 'color: green');
+                setCommandHistory([...CommandHistory, `File '${itemToRemove}' removed`]);
+              }
+              else{
+                console.log(`%cError: ${err}`, 'color: red');
+              }
+            });
             console.log(`%cError: ${err}`, 'color: red');
           }
         });
@@ -163,7 +242,8 @@ const consoleCommands: consoleCommandProps[] = [
         'rm - Remove a file or folder',
         'clear - Clear the console',
         'cls - Clear the console',
-
+        'rename - Rename a file or folder',
+        'mv - Move a file or folder',
       ]);
 
     }
@@ -231,8 +311,10 @@ React.useEffect(() => {
           </span>
           <input 
             type="text" 
-            value={input} 
-            onChange={(e) => {setInput(e.target.value)}} 
+            autoFocus
+            value={input}
+            onChange={handleChange}
+            onKeyDown={handleTabPress}
             className='w-full bg-transparent text-white outline-none border-none ml-1'
             ref={inputRef}
             />

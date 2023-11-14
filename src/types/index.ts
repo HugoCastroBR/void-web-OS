@@ -89,6 +89,9 @@ export type mouseContextProps = {
   selectedItems: string[]
   mouseOverItem?: string | undefined
   newFolder?: boolean
+  newFile?: boolean
+  mouseMovingPath?: string
+  mouseStopMovingPath?: string
 }
 
 export type mouseContextMenuOptionsProps = {
@@ -96,4 +99,8 @@ export type mouseContextMenuOptionsProps = {
   className?: string
   title: string
   onClick?: () => void
+}
+
+export type NotePadProps = nativeWindowProps & {
+  path: string
 }

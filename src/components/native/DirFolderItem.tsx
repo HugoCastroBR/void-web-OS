@@ -7,6 +7,7 @@ import { dirFileItemProps, dirFolderItemProps } from "@/types"
 import CustomText from "../atoms/CustomText"
 import useStore from "@/hooks/useStore"
 import { MouseAddSelectedItem, MouseClearSelectedItems, MouseRemoveSelectedItem, MouseSetMouseOverItem, WindowAddTab } from "@/store/actions"
+import useFS from "@/hooks/useFS"
 
 const DirFolderItem = ({
   title,
@@ -18,6 +19,8 @@ const DirFolderItem = ({
 
   const { states, dispatch } = useStore()
   const [isItemSelected, setIsItemSelected] = useState(false)
+
+  const {fs} = useFS()
 
   useEffect(() => {
     if (states.Mouse.selectedItems.includes(path)) {

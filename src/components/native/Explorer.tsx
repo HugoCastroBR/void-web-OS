@@ -12,6 +12,8 @@ import DirFileItem from './DirFileItem'
 import DirFolderItem from './DirFolderItem'
 import useStore from '@/hooks/useStore'
 import { MouseSetMousePath } from '@/store/actions'
+import NewDirFileItem from './NewDirFileItem'
+import NewDirFolderItem from './NewDirFolderItem'
 
 
 const Explorer = ({
@@ -42,7 +44,6 @@ const Explorer = ({
     await fs?.readdir(currentPath, (err, files) => {
       if (err) throw err
       if (files) {
-        console.log('files:', files)
         setDirFiles(files)
       }
     })
@@ -54,6 +55,13 @@ const Explorer = ({
 
   const [file, setFile] = useState<File | null>(null);
 
+  const [newFolderInputOpen, setNewFolderInputOpen] = useState(false);
+  const [newFileInputOpen, setNewFileInputOpen] = useState(false);
+
+
+  useEffect(() => {
+    Reload()
+  }, [fs, currentPath,states.Mouse])
 
   return (
     <WindowBox
@@ -94,16 +102,48 @@ const Explorer = ({
                       border: '1px solid gray',
                       borderStyle: 'dashed',
                       color: 'white',
+                      width: '90%'
                     }
                   }}
                 >Upload File</Button>}
               </FileButton>
+              {file && (
+                  <Text size="sm" ta="center" mt="sm">
+                    Picked file: {file.name}
+                  </Text>
+                )}
+              <Button
+                onClick={() => {
+                  setNewFileInputOpen(true)
+      
+                }}
+                className={`hover:bg-gray-600 transition-all duration-300 ease-in-out`}
+                styles={{
+                  root: {
+                    backgroundColor: '#2d374833',
+                    border: '1px solid gray',
+                    color: 'white',
+                    width: '90%'
+                  }
+                }}
+              >New File</Button>
+              <Button
+                onClick={() => {
+                  setNewFolderInputOpen(true)
+                }}
+                className={`hover:bg-gray-600 transition-all duration-300 ease-in-out`}
+                styles={{
+                  root: {
+                    backgroundColor: '#2d374833',
+                    border: '1px solid gray',
+                    color: 'white',
+                    width: '90%'
+                  }
+                }}
+              >New Folder</Button>
             </Group>
-            {file && (
-              <Text size="sm" ta="center" mt="sm">
-                Picked file: {file.name}
-              </Text>
-            )}
+
+
           </div>
           <div className='bg-gray-700 w-10/12 flex p-2'>
             <SimpleGrid cols={10} spacing="1px" verticalSpacing="1px">
@@ -114,7 +154,7 @@ const Explorer = ({
                       <DirFileItem
                         key={`${file}-${index}`}
                         title={file}
-                        icon={generateIcon(getExtension(file))}
+                        icon={generateIcon(getExtension(file)) || '/assets/icons/file.png'}  
                         path={`${currentPath}/${file}`.replaceAll('//', '/')}
                       />
                     )
@@ -132,6 +172,31 @@ const Explorer = ({
                     )
                   }
                 })
+              }
+              {newFileInputOpen && 
+              <NewDirFileItem
+                title='New File'
+                icon='/assets/icons/file.png'
+                inExplorer
+                inExplorerPath={currentPath}
+                inExplorerCB={() => {
+                  setNewFileInputOpen(false)
+                  Reload()
+                }}
+              />
+              }
+              {
+                newFolderInputOpen && 
+                <NewDirFolderItem
+                  title='New Folder'
+                  icon='/assets/icons/folder.png'
+                  inExplorer
+                  inExplorerPath={currentPath}
+                  inExplorerCB={() => {
+                    setNewFolderInputOpen(false)
+                    Reload()
+                  }}
+                />
               }
             </SimpleGrid>
           </div>

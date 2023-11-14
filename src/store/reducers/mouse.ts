@@ -9,7 +9,10 @@ export const MouseSlice = createSlice({
     mousePath: "/Desktop",
     selectedItems: [] as string[],
     mouseOverItem: undefined,
-    newFolder: false
+    newFolder: false,
+    mouseMovingPath: undefined,
+    mouseStopMovingPath: undefined,
+    newFile: false,
   } as mouseContextProps,
   reducers: {
     SET_MOUSE_IN_DESKTOP(state, { payload }: { payload: boolean }) {
@@ -37,6 +40,15 @@ export const MouseSlice = createSlice({
     },
     SET_NEW_FOLDER(state, { payload }: { payload: boolean }) {
       state.newFolder = payload;
-    }
+    },
+    SET_MOUSE_MOVING_PATH(state, { payload }: { payload: string | undefined }) {
+      state.mouseMovingPath = payload;
+    },
+    SET_MOUSE_STOP_MOVING_PATH(state, { payload }: { payload: string | undefined }) {
+      state.mouseStopMovingPath = payload;
+    },
+    SET_NEW_FILE(state, { payload }: { payload: boolean }) {
+      state.newFile = payload;
+    },
   }
 });

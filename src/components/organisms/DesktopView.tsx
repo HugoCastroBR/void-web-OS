@@ -15,6 +15,7 @@ import Explorer from '../native/Explorer'
 import DirFileItem from '../native/DirFileItem'
 import DirFolderItem from '../native/DirFolderItem'
 import NewDirFolderItem from '../native/NewDirFolderItem'
+import NewDirFileItem from '../native/NewDirFileItem'
 const DesktopView = () => {
 
   const {states, dispatch} = useStore()
@@ -148,7 +149,7 @@ const DesktopView = () => {
                 <DirFileItem 
                 key={`${file}-${index}`} 
                 title={file} 
-                icon={generateIcon(getExtension(file))}  
+                icon={generateIcon(getExtension(file)) || '/assets/icons/file.png'}  
                 path={`${DesktopPath}/${file}`.replaceAll('//','/')}
                 />
               )
@@ -169,6 +170,12 @@ const DesktopView = () => {
           title='New Folder'
           icon='/assets/icons/folder.png'
 
+          />
+        }
+        {
+          states.Mouse.newFile && <NewDirFileItem 
+          title='New File'
+          icon='/assets/icons/file.png'
           />
         }
       </SimpleGrid>

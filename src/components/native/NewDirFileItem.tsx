@@ -5,10 +5,10 @@ import { getExtension, uuid } from "@/utils/file"
 import Image from "next/image"
 import { dirFileItemProps, dirFolderItemProps } from "@/types"
 import CustomText from "../atoms/CustomText"
-import { MouseAddSelectedItem, MouseClearSelectedItems, MouseRemoveSelectedItem, MouseSetMouseOverItem, MouseSetNewFolder, WindowAddTab } from "@/store/actions"
+import { MouseAddSelectedItem, MouseClearSelectedItems, MouseRemoveSelectedItem, MouseSetMouseOverItem, MouseSetNewFile, MouseSetNewFolder, WindowAddTab } from "@/store/actions"
 import useStore from "@/hooks/useStore"
 import useFS from "@/hooks/useFS"
-const NewDirFolderItem = ({
+const NewDirFileItem = ({
   title,
   icon,
   inExplorer,
@@ -27,7 +27,9 @@ const NewDirFolderItem = ({
   const { states, dispatch } = useStore()
   const [inputValue, setInputValue] = useState('')
 
-
+  useEffect(() => {
+    console.log('path:', states.Mouse.mousePath)
+  }, [states.Mouse.mousePath])
 
   return (
     <>
@@ -47,16 +49,17 @@ const NewDirFolderItem = ({
           autoFocus
           value={inputValue}
           onKeyPress={(e) => {
+            console.log(`${states.Mouse.mousePath}/${inputValue}`)
             if(!inExplorer){
               if (e.key === 'Enter') {
-                fs?.mkdir(`${states.Mouse.mousePath}/${inputValue}`, () => {
+                fs?.writeFile(`${states.Mouse.mousePath}/${inputValue}`, '', () => {
                   console.log('created');
-                  dispatch(MouseSetNewFolder(false))
+                  dispatch(MouseSetNewFile(false))
                 })
               }
             }else{
               if (e.key === 'Enter') {
-                fs?.mkdir(`${inExplorerPath}/${inputValue}`, () => {
+                fs?.writeFile(`${inExplorerPath}/${inputValue}`, '', () => {
                   console.log('created');
                   inExplorerCB && inExplorerCB()
                 })
@@ -71,4 +74,4 @@ const NewDirFolderItem = ({
   )
 }
 
-export default NewDirFolderItem
+export default NewDirFileItem

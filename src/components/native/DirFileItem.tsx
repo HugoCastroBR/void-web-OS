@@ -4,8 +4,9 @@ import { getExtension } from "@/utils/file"
 import Image from "next/image"
 import { dirFileItemProps } from "@/types"
 import CustomText from "../atoms/CustomText"
-import { MouseAddSelectedItem, MouseClearSelectedItems, MouseRemoveSelectedItem, MouseSetMouseOverItem } from "@/store/actions"
+import { MouseAddSelectedItem, MouseClearSelectedItems, MouseRemoveSelectedItem, MouseSetMouseMovingPath, MouseSetMouseOverItem } from "@/store/actions"
 import useStore from "@/hooks/useStore"
+import Draggable from "react-draggable"
 
 const DirFileItem = ({
   title,
@@ -27,6 +28,10 @@ const DirFileItem = ({
     }
   }, [states.Mouse.selectedItems])
 
+  useEffect(() => {
+    console.log("path:", states.Mouse.mouseMovingPath)
+  }, [states.Mouse.mouseMovingPath])
+
   return (
     <>
       <div
@@ -35,7 +40,9 @@ const DirFileItem = ({
           if (isItemSelected) {
             dispatch(MouseRemoveSelectedItem(path))
           } else {
+            console.log("??",path)
             dispatch(MouseAddSelectedItem(path))
+            
           }
         }}
         onDoubleClick={() => {
@@ -43,16 +50,10 @@ const DirFileItem = ({
           onDoubleClick && onDoubleClick()
           return
         }}
-        onMouseEnter={() => {
-          dispatch(MouseSetMouseOverItem(path))
-        }}
-        onMouseLeave={() => {
-          dispatch(MouseSetMouseOverItem(undefined))
-        }}
         className={`
         h-28 px-4
         flex flex-col justify-evenly items-center cursor-pointer
-        hover:bg-gray-600 transition-all duration-300 ease-in-out
+        hover:bg-gray-600 
         ${isItemSelected ? 'bg-gray-600' : ''}
         `}>
         {icon && <Image src={icon} alt={title} width={48} height={48} />}

@@ -7,7 +7,7 @@ import { Loader } from '@mantine/core'
 import CustomText from '../atoms/CustomText'
 import useStore from '@/hooks/useStore'
 import {mouseContextMenuOptionsProps} from '@/types'
-import { MouseClearSelectedItems, MouseSetNewFolder, WindowAddTab } from '@/store/actions'
+import { MouseClearSelectedItems, MouseSetNewFile, MouseSetNewFolder, WindowAddTab } from '@/store/actions'
 import { uuid, verifyIfIsFile } from '@/utils/file'
 const Desktop = () => {
 
@@ -112,18 +112,30 @@ const Desktop = () => {
           title='Delete'
           disabled={states.Mouse.selectedItems.length === 0}
           onClick={() => {
-            console.log(states.Mouse.selectedItems)
             states.Mouse.selectedItems.forEach((item) => {
               if(verifyIfIsFile(item)){
                 fs?.unlink(item, (err) => {
-                  if(err) throw err
-                  console.log('deleted file');
-                
+                  if(err){
+                    fs?.rmdir(item, (err) => {
+                      if(err) throw err
+                      console.log('deleted folder');
+                    })
+                  }else{
+                    console.log('deleted file');
+                  }
+                  
                 })
               }else{
                 fs?.rmdir(item, (err) => {
-                  if(err) throw err
-                  console.log('deleted folder');
+                  if(err) {
+                    fs?.unlink(item, (err) => {
+                      if(err) throw err
+                      console.log('deleted file');
+                    })
+                  }else{
+                    console.log('deleted folder');
+                  }
+                  
                 
                 })
               }
@@ -153,6 +165,24 @@ const Desktop = () => {
     )
   }
 
+  const MouseOptionNewFile= () => {
+
+
+    return(
+      <>
+        <MouseOption
+          title='New File'
+          disabled={states.Mouse.selectedItems.length !== 0}
+          onClick={() => {
+            // dispatch(MouseClearSelectedItems())
+            dispatch(MouseSetNewFile(true))
+          }}
+          className='i-mdi-file-plus'
+        />
+      </>
+    )
+  }
+
   const MenuContext = () => {
     return (
       <div
@@ -176,6 +206,7 @@ const Desktop = () => {
           <MouseOptionNewFolder />
         }
         <MouseOptionDelete />
+        <MouseOptionNewFile />
       </div>
     )
   }
