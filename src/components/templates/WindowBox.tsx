@@ -21,6 +21,7 @@ export type WindowBoxProps = {
   disableClose?: boolean
   disableMinimize?: boolean
   disableMaximize?: boolean
+  style?: React.CSSProperties
 }
 const WindowBox = ({
   title,
@@ -36,8 +37,8 @@ const WindowBox = ({
   customClose,
   disableClose,
   disableMinimize,
-  disableMaximize
-
+  disableMaximize,
+  style
 }: WindowBoxProps) => {
 
   const { states, dispatch } = useStore()
@@ -102,6 +103,7 @@ const WindowBox = ({
         onMouseMove={() => {
           onMouseMove && onMouseMove()
         }}
+        style={style || {}}
         className={`
         absolute
         flex flex-col z-20
@@ -186,7 +188,7 @@ const WindowBox = ({
           </div>
 
         </div>
-        <div className='p-1 w-full h-full'>
+        <div className='p-1 w-full h-full overflow-hidden'>
           {children}
         </div>
       </div>

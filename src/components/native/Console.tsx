@@ -5,7 +5,7 @@ import { consoleCommandProps, nativeWindowProps } from '@/types'
 import useFS from '@/hooks/useFS'
 import { uuid, verifyIfIsFile } from '@/utils/file'
 import useStore from '@/hooks/useStore'
-import { WindowAddTab } from '@/store/actions'
+import { WindowAddTab, WindowRemoveTab } from '@/store/actions'
 
 const Console = ({
   tab,
@@ -33,6 +33,13 @@ const Console = ({
     'mv',
     'cp',
     'dp',
+    'cat',
+    'pwd',
+    'date',
+    'time',
+    'exit',
+    'grep',
+    'echo'
   ];
 
   const handleTabPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -222,6 +229,80 @@ const Console = ({
       },
     },
     {
+      command: 'cat',
+      description: 'Show the content of a file',
+      callback: ({ params }) => {
+        fs?.readFile(`${currentDirectory}/${params[0]}`, 'utf8', (err, data) => {
+          if (err) throw err
+          if (data) {
+            console.log(`%c${data}`, 'color: green');
+            setCommandHistory([...CommandHistory, data]);
+          }
+        })
+      },
+    },
+    {
+      command: 'echo',
+      description: 'Print a message in the console',
+      callback: ({ params }) => {
+        const message = params.join(' ');
+        console.log(`%c${message}`, 'color: green');
+        setCommandHistory([...CommandHistory, message]);
+      },
+    },
+    {
+      command: 'pwd',
+      description: 'Show the current directory',
+      callback: () => {
+        console.log(`%c${currentDirectory}`, 'color: green');
+        setCommandHistory([...CommandHistory, currentDirectory]);
+      },
+    },
+    {
+      command: 'date',
+      description: 'Show the current date',
+      callback: () => {
+        const date = new Date();
+        console.log(`%c${date}`, 'color: green');
+        setCommandHistory([...CommandHistory, date.toString()]);
+      },
+    },
+    {
+      command: 'time',
+      description: 'Show the current time',
+      callback: () => {
+        const date = new Date();
+        console.log(`%c${date.toLocaleTimeString()}`, 'color: green');
+        setCommandHistory([...CommandHistory, date.toLocaleTimeString()]);
+      },
+    },
+    {
+      command: 'exit',
+      description: 'Close the console',
+      callback: () => {
+        dispatch(WindowRemoveTab({
+          uuid: tab.uuid,
+          title: tab.title || '',
+        }))
+      }
+    },
+    {
+      command: 'grep',
+      description: 'Find a string in a file',
+      callback: ({ params }) => {
+        const [stringToFind, fileToFind] = params;
+        fs?.readFile(`${currentDirectory}/${fileToFind}`, 'utf8', (err, data) => {
+          if (err) throw err
+          if (data) {
+            const lines = data.split('\n');
+            const foundLines = lines.filter(line => line.includes(stringToFind));
+            console.log(`%c${foundLines.join('\n')}`, 'color: green');
+            setCommandHistory([...CommandHistory, foundLines.join('\n')]);
+          }
+        })
+      },
+    },
+    {
       command: 'rm',
       description: 'Remove a file or folder',
       callback: ({ params }) => {
@@ -310,8 +391,14 @@ const Console = ({
           'mv - Move a file or folder',
           'cp - Copy a file or folder',
           'dp - Duplicate a file or folder',
+          'cat - Show the content of a file',
+          'pwd - Show the current directory',
+          'date - Show the current date',
+          'time - Show the current time',
+          'exit - Close the console',
+          'grep - Find a string in a file',
+          'echo - Print a message in the console'
         ]);
-
       }
     },
   ];
@@ -360,13 +447,13 @@ const Console = ({
       currentWindow={window}
       currentTab={tab}
       resizable
-      className='w-96 h-96 flex flex-col '
+      className='h-3/5 w-3/5 flex flex-col '
     >
       <div className='h-full flex flex-col items-start justify-end p-1 overflow-hidden'>
         {
           CommandHistory.map((command, index) => {
             return (
-              <div key={index} className='text-white text-sm m-px '>
+              <div key={index} className='text-white text-xs m-px '>
                 {currentDirectory}$: {command}
               </div>
             )
@@ -382,7 +469,7 @@ const Console = ({
             value={input}
             onChange={handleChange}
             onKeyDown={handleTabPress}
-            className='w-full bg-transparent text-white outline-none border-none ml-1'
+            className='w-full text-sm bg-transparent text-white outline-none border-none ml-1'
             ref={inputRef}
           />
         </div>

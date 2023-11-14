@@ -94,6 +94,7 @@ export type mouseContextProps = {
   copyItemsPath?: string[]
   cutItemsPath?: string[]
   mouseContextPath?: string
+  isRenaming?: boolean
 
 }
 
@@ -106,4 +107,14 @@ export type mouseContextMenuOptionsProps = {
 
 export type NotePadProps = nativeWindowProps & {
   path: string
+}
+
+export type ImageReaderProps = nativeWindowProps & {
+  path: string
+}
+
+export type CustomSystemProps = {
+  background: string | null
+  consoleColor: string
+  consoleOpacity: number
 }

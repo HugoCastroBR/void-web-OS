@@ -40,3 +40,7 @@ export const extractParentPath = (fullPath: string): string | null => {
   return null;
 };
 
+export function getLastPathSegment(path: string): string {
+  const pathSegments = path.split('/');
+  return pathSegments[pathSegments.length - 1];
+}

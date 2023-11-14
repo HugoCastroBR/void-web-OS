@@ -7,8 +7,8 @@ import { Loader } from '@mantine/core'
 import CustomText from '../atoms/CustomText'
 import useStore from '@/hooks/useStore'
 import { mouseContextMenuOptionsProps } from '@/types'
-import { MouseClearSelectedItems, MouseSetCopyItemsPath, MouseSetCutItemsPath, MouseSetNewFile, MouseSetNewFolder, WindowAddTab } from '@/store/actions'
-import { uuid, verifyIfIsFile } from '@/utils/file'
+import { MouseClearSelectedItems, MouseSetCopyItemsPath, MouseSetCutItemsPath, MouseSetIsRenaming, MouseSetNewFile, MouseSetNewFolder, WindowAddTab } from '@/store/actions'
+import { extractParentPath, getLastPathSegment, uuid, verifyIfIsFile } from '@/utils/file'
 
 const Desktop = () => {
 
@@ -103,6 +103,19 @@ const Desktop = () => {
           })
         }}
         className='i-mdi-open-in-app'
+      />
+    )
+  }
+
+  const MouseOptionRename = () => {
+    return (
+      <MouseOption
+        title='Rename'
+        disabled={states.Mouse.selectedItems.length !== 1}
+        onClick={() => {
+          dispatch(MouseSetIsRenaming(true))
+        }}
+        className='i-mdi-rename'
       />
     )
   }
@@ -291,6 +304,7 @@ const Desktop = () => {
       >
         <MouseOptionOpen />
         {/* <MouseOptionCopy /> */}
+        <MouseOptionRename/>
         <MouseOptionCut />
         <MouseOptionPaste />
         <MouseOptionNewFolder />
@@ -319,7 +333,7 @@ const Desktop = () => {
   return (
     <main
       className='
-    min-h-full min-w-full w-screen h-screen overflow-hidden bg-gray-600 flex flex-col justify-between
+    min-h-full min-w-full w-screen h-screen overflow-hidden bg-gray-800 flex flex-col justify-between
     '
       onContextMenu={(e) => {
         e.preventDefault()
