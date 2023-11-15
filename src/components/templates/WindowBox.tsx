@@ -22,6 +22,7 @@ export type WindowBoxProps = {
   disableMinimize?: boolean
   disableMaximize?: boolean
   style?: React.CSSProperties
+  empty?: boolean
 }
 const WindowBox = ({
   title,
@@ -38,7 +39,8 @@ const WindowBox = ({
   disableClose,
   disableMinimize,
   disableMaximize,
-  style
+  style,
+  empty
 }: WindowBoxProps) => {
 
   const { states, dispatch } = useStore()
@@ -74,6 +76,14 @@ const WindowBox = ({
       }))
     }
 
+  }
+
+  if(empty){
+    return (
+      <>
+        {children}
+      </>
+    )
   }
 
 

@@ -8,18 +8,20 @@ import { WindowAddTab } from '@/store/actions'
 import { uuid } from '@/utils/file'
 const StartMenu = () => {
 
-  const {states, dispatch} = useStore()
+  const { states, dispatch } = useStore()
+
+
 
   return (
 
-    <Menu 
-    shadow="md" 
-    width={200}
-    transitionProps={{
-      duration: 300,
-      timingFunction: 'ease',
-      transition: 'pop-bottom-left',
-    }}
+    <Menu
+      shadow="md"
+      width={200}
+      transitionProps={{
+        duration: 300,
+        timingFunction: 'ease',
+        transition: 'pop-bottom-left',
+      }}
     >
       <Menu.Target>
         <Button
@@ -42,7 +44,7 @@ const StartMenu = () => {
           mr-px
           '
             onClick={() => {
-              console.log('%cBottomTaskBar/Log: Start Menu Clicked','color: cyan')
+              console.log('%cBottomTaskBar/Log: Start Menu Clicked', 'color: cyan')
             }}
           >
             <Image
@@ -60,7 +62,7 @@ const StartMenu = () => {
       <Menu.Dropdown
         color='black'
         styles={{
-          dropdown:{
+          dropdown: {
             backgroundColor: '#2d374833',
             border: '1px solid #4a5568',
             padding: '0px',
@@ -78,47 +80,60 @@ const StartMenu = () => {
             className='text-white'
           />
         </Menu.Label>
-        <Menu.Item
-          styles={{
-            item:{
-              backgroundColor: 'transparent',
-              padding: '0px',
-              margin: '0px',
-              height: '40px',
-              width: '100%',
-              borderRadius: '0px',
-              backdropFilter: 'blur(10px)',
-            
-            }
-          }}
-        >
-          <div 
-            onClick={() => {
-              console.log('%cBottomTaskBar/Log: Explorer Clicked','color: cyan')
-              dispatch(WindowAddTab({
-                title: 'Explorer',
-                tab: {
-                  uuid: uuid(6),
-                  title: 'Explorer',
-                  maximized: false,
-                  minimized: false,
-                  value: '/Desktop'
-                }
-              }))
-            }}
-            className='
-            pl-2
-            flex items-center w-full h-10 bg-gray-800
-            hover:bg-gray-600 transition-all duration-300 ease-in-out
-            '
-          >
-            <CustomText
-              text='Explorer'
-              className='text-white'
-            />
-          </div>
-        </Menu.Item>
-          
+        {states.Windows.windows.map((window, index) => {
+          return (
+            <>
+              <Menu.Item
+                key={index}
+                styles={{
+                  item: {
+                    backgroundColor: 'transparent',
+                    padding: '0px',
+                    margin: '0px',
+                    height: '40px',
+                    width: '100%',
+                    borderRadius: '0px',
+                    backdropFilter: 'blur(10px)',
+
+                  }
+                }}
+              >
+                <div
+                  onClick={() => {
+                    console.log('%cBottomTaskBar/Log: Explorer Clicked', 'color: cyan')
+                    dispatch(WindowAddTab({
+                      title: { window }.window.title,
+                      tab: {
+                        uuid: uuid(6),
+                        title: { window }.window.title,
+                        maximized: false,
+                        minimized: false,
+                        value: '/Desktop'
+                      }
+                    }))
+                  }}
+                  className='
+                    pl-2
+                    flex items-center w-full h-10 bg-gray-800
+                    hover:bg-gray-600 transition-all duration-300 ease-in-out
+                    '
+                > 
+                  <Image
+                    src={window.icon || '/assets/icons/eye-explorer.png'}
+                    alt='eye-explorer'
+                    width={20}
+                    height={20}
+                  />
+                  <CustomText
+                    text={window.title}
+                    className='ml-1 text-white'
+                  />
+                </div>
+              </Menu.Item>
+            </>
+          )
+        })}
+
 
 
       </Menu.Dropdown>

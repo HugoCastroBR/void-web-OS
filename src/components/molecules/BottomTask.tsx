@@ -83,7 +83,7 @@ const BottomTask = ({
           )
         case 'md':
           return (
-            <span className='i-mdi-markdown text-white text-xl' ></span>
+            <span className='i-mdi-format-text text-white text-xl' ></span>
           )
         case 'pdf':
           return (
@@ -115,6 +115,14 @@ const BottomTask = ({
         case 'Code Editor':
           return (
             <span className='i-mdi-vs-code text-white text-xl' ></span>
+          )
+        case 'Void Browser':
+          return (
+            <span className='i-mdi-earth text-white text-xl' ></span>
+          )
+        case 'Rich Text Editor':
+          return (
+            <span className='i-mdi-format-text text-white text-xl' ></span>
           )
         default:
           return (

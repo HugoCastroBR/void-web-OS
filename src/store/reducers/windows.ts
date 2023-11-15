@@ -40,6 +40,12 @@ export const WindowsSlice = createSlice({
         icon: "/assets/icons/void-browser.png",
         tabs: [] as tabStateProps[],
         native: false
+      },
+      {
+        title: "Rich Text Editor",
+        icon: "/assets/icons/md.png",
+        tabs: [] as tabStateProps[],
+        native: true
       }
 
     ] as windowStateProps[]

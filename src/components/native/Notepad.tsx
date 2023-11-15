@@ -100,6 +100,7 @@ const Notepad = ({
         uuid={tab.uuid}
         resizable
         className='w-1/4 h-2/5 flex flex-col '
+        
       >
         <AppTaskMenu
           onSave={() => {

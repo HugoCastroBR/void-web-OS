@@ -30,9 +30,9 @@ const CodeEditor = ({
   const [currentDirectory, setCurrentDirectory] = React.useState<string>('/');
   const [DirectoryHistory, setDirectoryHistory] = React.useState<string[]>([]);
 
-  // console.log = (message: string, ...optionalParams: any[]) => {
-  //   setCommandHistory([...CommandHistory, message]);
-  // }
+  console.log = (message: string, ...optionalParams: any[]) => {
+    setCommandHistory([...CommandHistory, message]);
+  }
 
 
   const availableCommands: string[] = [

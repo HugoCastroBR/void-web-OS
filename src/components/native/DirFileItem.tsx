@@ -100,6 +100,20 @@ const DirFileItem = ({
               }
             }))
           }
+          if(extension === 'md'){
+            dispatch(WindowAddTab({
+              title: 'Rich Text Editor',
+              tab: {
+                uuid: uuid(6),
+                title: 'Rich Text Editor',
+                ficTitle: title,
+                maximized: false,
+                minimized: false,
+                value: path,
+                extension: extension
+              }
+            }))
+          }
           if(CodeExtension.includes(extension)){
             dispatch(WindowAddTab({
               title: 'Code Editor',

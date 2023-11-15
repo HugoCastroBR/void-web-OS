@@ -20,6 +20,7 @@ import Notepad from '../native/Notepad'
 import ImageReader from '../native/ImageReader'
 import CodeEditor from '../native/CodeEditor'
 import VoidBrowser from '../native/VoidBrowser'
+import RichTextEditor from '../native/RichTextEditor'
 const DesktopView = () => {
 
   const {states, dispatch} = useStore()
@@ -161,6 +162,18 @@ const DesktopView = () => {
             if(tab.title === 'Code Editor'){
               return (
                 <CodeEditor
+                  path={tab?.value || '/'}
+                  tab={tab}
+                  key={index}
+                  window={window}
+                />
+              )
+            }
+          }
+          {
+            if(tab.title === 'Rich Text Editor'){
+              return (
+                <RichTextEditor
                   path={tab?.value || '/'}
                   tab={tab}
                   key={index}

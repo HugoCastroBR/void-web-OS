@@ -129,3 +129,7 @@ export type VoidBrowserProps = nativeWindowProps & {
   path: string
   local?: boolean
 }
+
+export type RichTextEditorProps = nativeWindowProps & {
+  path: string
+}
