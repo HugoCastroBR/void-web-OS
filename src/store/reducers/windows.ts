@@ -28,6 +28,12 @@ export const WindowsSlice = createSlice({
         icon: "/assets/icons/image.png",
         tabs: [] as tabStateProps[],
         native: false
+      },
+      {
+        title: "Code Editor",
+        icon: "/assets/icons/vscode.png",
+        tabs: [] as tabStateProps[],
+        native: true
       }
     ] as windowStateProps[]
   

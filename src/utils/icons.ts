@@ -10,6 +10,8 @@ export function generateIcon(extension:string){
       return '/assets/icons/image.png'
     case 'gif':
       return '/assets/icons/image.png'
+    case 'js':
+      return '/assets/icons/js.png'
     default: '/assets/icons/file.png'
   }
 }

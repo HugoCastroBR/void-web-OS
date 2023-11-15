@@ -1,19 +1,27 @@
 'use client'
-import React from 'react'
+import { CodeEditorProps, consoleCommandProps } from '@/types'
+import React, { useEffect } from 'react'
+import CustomText from '../atoms/CustomText'
 import WindowBox from '../templates/WindowBox'
-import { consoleCommandProps, nativeWindowProps } from '@/types'
+import ReactDOM from 'react-dom';
+import Editor, { useMonaco } from '@monaco-editor/react';
+import CodeEditorAppTopBar from '../organisms/CodeEditorAppTopBar'
 import useFS from '@/hooks/useFS'
-import { uuid, verifyIfIsFile } from '@/utils/file'
+import Console from './Console'
+import { WindowRemoveTab, WindowAddTab } from '@/store/actions'
+import { verifyIfIsFile, uuid, verifyIfIsObject } from '@/utils/file'
 import useStore from '@/hooks/useStore'
-import { WindowAddTab, WindowRemoveTab } from '@/store/actions'
-
-const Console = ({
+const CodeEditor = ({
   tab,
-  window
-}: nativeWindowProps) => {
+  window,
+  path
+}: CodeEditorProps) => {
 
-
+  const monaco = useMonaco();
   const { fs } = useFS()
+
+  const [code, setCode] = React.useState('// write your code here...');
+
   const { states, dispatch } = useStore()
 
   const [input, setInput] = React.useState('');
@@ -415,7 +423,7 @@ const Console = ({
       command: 'code',
       description: 'Open the code editor',
       callback: ({ params }) => {
-        if(params){
+        if (params) {
           dispatch(WindowAddTab({
             title: 'Code Editor',
             tab: {
@@ -426,7 +434,7 @@ const Console = ({
               value: `${currentDirectory}/${params[0]}`,
             }
           }))
-        }else{
+        } else {
           dispatch(WindowAddTab({
             title: 'Code Editor',
             tab: {
@@ -523,44 +531,109 @@ const Console = ({
 
 
 
+  useEffect(() => {
+    if (monaco) {
+      //configure monaco
+    }
+  }, [monaco]);
+
+
+  useEffect(() => {
+    fs?.readFile(`${tab.value}`, 'utf8', (err, data) => {
+      if (err) throw err
+      if (data) {
+        setCode(data)
+      }
+    })
+  }, [monaco, fs])
+
+
+
+  const handlerExecute = () => {
+    eval(code)
+  }
+
   return (
-    <WindowBox
-      title={tab.title || window.title}
-      uuid={tab.uuid}
-      currentWindow={window}
-      currentTab={tab}
-      resizable
-      className='h-3/5 w-3/5 flex flex-col '
-    >
-      <div className='h-full flex flex-col items-start justify-end p-1 overflow-hidden'>
-        {
-          CommandHistory.map((command, index) => {
-            return (
-              <div key={index} className='text-white text-xs m-px '>
-                {currentDirectory}$: {command}
-              </div>
-            )
-          })
-        }
-        <div className=' flex'>
-          <span className='text-white'>
-            {currentDirectory}$:
-          </span>
-          <input
-            type="text"
-            autoFocus
-            value={input}
-            onChange={handleChange}
-            onKeyDown={handleTabPress}
-            className='w-full text-sm bg-transparent text-white outline-none border-none ml-1'
-            ref={inputRef}
-          />
+    <>
+      <WindowBox
+        currentTab={tab}
+        currentWindow={window}
+        title='Code Editor'
+        uuid={tab.uuid}
+        resizable
+        className='h-3/5 w-3/5 flex flex-col '
+      >
+        <CodeEditorAppTopBar
+          onExecute={handlerExecute}
+          filename={tab.ficTitle || ''}
+          onSave={(filename) => {
+            fs?.writeFile(`/Desktop/${filename}`, code, (err) => { err && console.log(err) })
+          }}
+        />
+        <div
+          className='flex w-full pt-1'
+          style={{ height: 'calc(100% - 64px)' }}
+        >
+          <div className='w-7/12'>
+            <Editor
+              height="100%"
+              width={'100%'}
+              defaultLanguage="javascript"
+              theme="vs-dark"
+              options={{
+                autoIndent: 'full',
+                contextmenu: true,
+                fontFamily: 'monospace',
+                fontSize: 13,
+                lineHeight: 24,
+                hideCursorInOverviewRuler: true,
+                matchBrackets: 'always',
+                minimap: {
+                  enabled: true,
+                },
+                scrollbar: {
+                  horizontalSliderSize: 4,
+                  verticalSliderSize: 18,
+                },
+                selectOnLineNumbers: true,
+                roundedSelection: false,
+                readOnly: false,
+                cursorStyle: 'line',
+                automaticLayout: true,
+              }}
+              value={code}
+              onChange={(value) => setCode(value || '')}
+            />
+          </div>
+          <div className='w-5/12 flex flex-col items-start justify-end p-1 overflow-hidden '>
+            {
+              CommandHistory.map((command, index) => {
+                return (
+                  <div key={index} className='text-white text-xs m-px w-full'>
+                    {currentDirectory}$: {verifyIfIsObject(command) ? JSON.stringify(command) : command}
+                  </div>
+                )
+              })
+            }
+            <div className=' flex w-full'>
+              <span className='text-white'>
+                {currentDirectory}$:
+              </span>
+              <input
+                type="text"
+                autoFocus
+                value={input}
+                onChange={handleChange}
+                onKeyDown={handleTabPress}
+                className='w-full text-sm bg-transparent text-white outline-none border-none ml-1'
+                ref={inputRef}
+              />
+            </div>
+          </div>
         </div>
-
-      </div>
-
-    </WindowBox>
+      </WindowBox>
+    </>
   )
 }
 
-export default Console
+export default CodeEditor

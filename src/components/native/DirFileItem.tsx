@@ -84,6 +84,20 @@ const DirFileItem = ({
               }
             }))
           }
+          if(extension === "js"){
+            dispatch(WindowAddTab({
+              title: 'Code Editor',
+              tab: {
+                uuid: uuid(6),
+                title: 'Code Editor',
+                ficTitle: title,
+                maximized: false,
+                minimized: false,
+                value: path
+              }
+            }))
+          
+          }
         }}
         className={`
         h-24 px-4

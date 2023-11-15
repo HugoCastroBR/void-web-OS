@@ -44,3 +44,7 @@ export function getLastPathSegment(path: string): string {
   const pathSegments = path.split('/');
   return pathSegments[pathSegments.length - 1];
 }
+
+export function verifyIfIsObject(obj: any) {
+  return obj !== null && typeof obj === 'object';
+}

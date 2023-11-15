@@ -85,6 +85,10 @@ const BottomTask = ({
           return (
             <span className='i-mdi-image text-white text-xl' ></span>
           )
+        case 'Code Editor':
+          return (
+            <span className='i-mdi-vs-code text-white text-xl' ></span>
+          )
         default:
           return (
             <span className='i-mdi-folder-open text-white text-xl' ></span>

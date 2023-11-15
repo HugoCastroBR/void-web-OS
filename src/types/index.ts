@@ -118,3 +118,7 @@ export type CustomSystemProps = {
   consoleColor: string
   consoleOpacity: number
 }
+
+export type CodeEditorProps = nativeWindowProps & {
+  path: string
+}
