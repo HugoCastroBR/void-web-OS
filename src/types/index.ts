@@ -122,3 +122,7 @@ export type CustomSystemProps = {
 export type CodeEditorProps = nativeWindowProps & {
   path: string
 }
+
+export type VoidBrowserProps = nativeWindowProps & {
+  path: string
+}

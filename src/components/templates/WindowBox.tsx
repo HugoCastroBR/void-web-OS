@@ -100,9 +100,9 @@ const WindowBox = ({
           dispatch(MouseSetIsMouseInDesktop(true))
           onMouseLeave && onMouseLeave()
         }}
-        onMouseMove={() => {
-          onMouseMove && onMouseMove()
-        }}
+        // onMouseMove={() => {
+        //   onMouseMove && onMouseMove()
+        // }}
         style={style || {}}
         className={`
         absolute

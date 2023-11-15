@@ -19,6 +19,7 @@ import NewDirFileItem from '../native/NewDirFileItem'
 import Notepad from '../native/Notepad'
 import ImageReader from '../native/ImageReader'
 import CodeEditor from '../native/CodeEditor'
+import VoidBrowser from '../native/VoidBrowser'
 const DesktopView = () => {
 
   const {states, dispatch} = useStore()
@@ -160,6 +161,18 @@ const DesktopView = () => {
             if(tab.title === 'Code Editor'){
               return (
                 <CodeEditor
+                  path={tab?.value || '/'}
+                  tab={tab}
+                  key={index}
+                  window={window}
+                />
+              )
+            }
+          }
+          {
+            if(tab.title === 'Void Browser'){
+              return (
+                <VoidBrowser
                   path={tab?.value || '/'}
                   tab={tab}
                   key={index}
