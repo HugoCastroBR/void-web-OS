@@ -59,7 +59,6 @@ export const MouseRemoveSelectedItem = (payload:string) => {
   return MouseActions.REMOVE_SELECTED_ITEM(payload)
 }
 export const MouseClearSelectedItems = () => {
-  console.log("clear")
   return MouseActions.SET_SELECTED_ITEMS([])
 }
 export const MouseSetMouseOverItem = (payload:string | undefined) => {

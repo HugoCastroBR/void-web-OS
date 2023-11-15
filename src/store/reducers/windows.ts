@@ -39,7 +39,7 @@ export const WindowsSlice = createSlice({
         title: "Void Browser",
         icon: "/assets/icons/void-browser.png",
         tabs: [] as tabStateProps[],
-        native: true
+        native: false
       }
 
     ] as windowStateProps[]

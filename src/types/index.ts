@@ -15,6 +15,8 @@ export type tabStateProps = {
   minimized: boolean
   focused?: boolean
   value?: string
+  extension?: string
+  local?: boolean
 }
 
 
@@ -125,4 +127,5 @@ export type CodeEditorProps = nativeWindowProps & {
 
 export type VoidBrowserProps = nativeWindowProps & {
   path: string
+  local?: boolean
 }

@@ -57,6 +57,7 @@ const CodeEditorAppTopBar = ({
           }}
         />
       </div>
+      
     </div>
   )
 }

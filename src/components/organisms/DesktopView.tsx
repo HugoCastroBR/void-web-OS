@@ -187,7 +187,7 @@ const DesktopView = () => {
         {states.Windows.windows.map((window,index) => {
           if(window.native){
             return (
-              <DesktopNativeItem key={`${window.title}-${index}`} title={window.title} icon={window?.icon || ''} />
+              <DesktopNativeItem key={`${window.title}-${index}`} title={window.title} icon={window?.icon || ''}  />
             )
           }
         })}

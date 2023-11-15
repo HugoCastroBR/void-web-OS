@@ -42,6 +42,7 @@ const DirFileItem = ({
   }, [states.Mouse.isRenaming])
 
 
+  const CodeExtension = ["js" || "ts" || "css"]
   return (
     <>
       <div
@@ -84,7 +85,22 @@ const DirFileItem = ({
               }
             }))
           }
-          if(extension === "js"){
+          if(extension === "html"){
+            dispatch(WindowAddTab({
+              title: 'Void Browser',
+              tab: {
+                uuid: uuid(6),
+                title: 'Void Browser',
+                ficTitle: title,
+                maximized: false,
+                minimized: false,
+                value: path,
+                extension: extension,
+                local: true
+              }
+            }))
+          }
+          if(CodeExtension.includes(extension)){
             dispatch(WindowAddTab({
               title: 'Code Editor',
               tab: {
@@ -93,10 +109,10 @@ const DirFileItem = ({
                 ficTitle: title,
                 maximized: false,
                 minimized: false,
-                value: path
+                value: path,
+                extension: extension
               }
             }))
-          
           }
         }}
         className={`

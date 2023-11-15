@@ -3,7 +3,7 @@ import React from 'react'
 import WindowBox from '../templates/WindowBox'
 import { consoleCommandProps, nativeWindowProps } from '@/types'
 import useFS from '@/hooks/useFS'
-import { uuid, verifyIfIsFile } from '@/utils/file'
+import { uuid, verifyIfIsFile, verifyIfIsObject } from '@/utils/file'
 import useStore from '@/hooks/useStore'
 import { WindowAddTab, WindowRemoveTab } from '@/store/actions'
 
@@ -21,9 +21,9 @@ const Console = ({
   const [currentDirectory, setCurrentDirectory] = React.useState<string>('/');
   const [DirectoryHistory, setDirectoryHistory] = React.useState<string[]>([]);
 
-  console.log = (message: string, ...optionalParams: any[]) => {
-    setCommandHistory([...CommandHistory, message]);
-  }
+  // console.log = (message: string, ...optionalParams: any[]) => {
+  //   setCommandHistory([...CommandHistory, message]);
+  // }
 
 
   const availableCommands: string[] = [
@@ -537,7 +537,7 @@ const Console = ({
           CommandHistory.map((command, index) => {
             return (
               <div key={index} className='text-white text-xs m-px '>
-                {currentDirectory}$: {command}
+                    {currentDirectory}$: {verifyIfIsObject(command) ? JSON.stringify(command) : command}
               </div>
             )
           })

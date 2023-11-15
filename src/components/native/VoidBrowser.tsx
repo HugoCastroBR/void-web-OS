@@ -3,13 +3,18 @@
 import { VoidBrowserProps } from '@/types'
 import React, { useEffect, useState } from 'react'
 import WindowBox from '../templates/WindowBox'
-import { loadExternalSite } from '@/api'
+
+import useFS from '@/hooks/useFS'
+
 
 const VoidBrowser = ({
   tab,
   window,
-  path
-}:VoidBrowserProps) => {
+  path,
+  local
+}: VoidBrowserProps) => {
+
+  const { fs } = useFS()
 
   const [text, setText] = React.useState<string>('')
   const [url, setUrl] = React.useState<string>('')
@@ -20,19 +25,22 @@ const VoidBrowser = ({
     }
   }
 
-  const [externalSiteContent, setExternalSiteContent] = useState<string>('');
+  const [localContent, setLocalContent] = useState<string>('')
 
-
-  const loadData = async () => {
-    const res = await loadExternalSite(url);
-    setExternalSiteContent(res);
-    console.log(res);
+  const loadLocalContent = () => {
+    fs?.readFile(path, 'utf8', (err, data) => {
+      if (err) throw err
+      if (data) {
+        console.log(data)
+        setLocalContent(data)
+      }
+    })
   }
 
   useEffect(() => {
-    const res = loadData();
+    loadLocalContent()
+  }, [fs])
 
-  }, [url]);
 
   return (
     <WindowBox
@@ -44,20 +52,20 @@ const VoidBrowser = ({
       className='w-2/4 h-3/5 flex flex-col '
     >
       <div className='w-full h-full bg-gray-800 flex flex-col'>
-        <div 
-        className='
+        <div
+          className='
         flex h-16 p-2 bg-gray-600 border-b border-gray-500 
         justify-evenly items-center'>
-          <div className='w-1/12 ml-16 mt-1'>
-            <span 
-            className='i-mdi-arrow-left text-white text-2xl
+          {/* <div className='w-1/12 ml-16 mt-1'>
+            <span
+              className='i-mdi-arrow-left text-white text-2xl
             cursor-pointer hover:text-gray-400 
             ' >
             </span>
-          </div>
+          </div> */}
           <div className='w-1/12 -ml-6 mt-1'>
-            <span 
-            className='i-mdi-reload text-white text-2xl
+            <span
+              className='i-mdi-reload text-white text-2xl
             cursor-pointer hover:text-gray-400 ' >
             </span>
           </div>
@@ -72,30 +80,28 @@ const VoidBrowser = ({
                 setText(e.target.value)
               }}
             />
-            <span
-            onClick={() => {
-              loadData();
-              setUrl(text)
-            }}
-            className='i-mdi-magnify text-white text-2xl cursor-pointer hover:text-gray-400'
-            ></span>
+            {/* <span
+              onClick={() => {
+                setUrl(text)
+              }}
+              className='i-mdi-magnify -mb-1 ml-1 text-white text-2xl cursor-pointer hover:text-gray-400'
+            ></span> */}
           </div>
-          <div className='w-1/12'>
-            <span 
-            className='i-mdi-hamburger-menu text-white text-2xl
+          {/* <div className='w-1/12'>
+            <span
+              className='i-mdi-hamburger-menu text-white text-2xl
             cursor-pointer hover:text-gray-400 ' >
             </span>
-          </div>
+          </div> */}
         </div>
         <div className='w-full h-full bg-gray-200'>
-          {/* <iframe
-            src={url}
+          <iframe
             className='w-full h-full'
+            srcDoc={localContent || '<h1>loading...</h1>'}
+            referrerPolicy='no-referrer'
+            sandbox="allow-downloads allow-forms allow-modals allow-pointer-lock allow-popups allow-presentation allow-same-origin allow-scripts"
           >
-
-          </iframe> */}
-          <div className='w-full h-full bg-red-50'
-          dangerouslySetInnerHTML={{ __html: externalSiteContent }} />
+          </iframe>
         </div>
       </div>
     </WindowBox>

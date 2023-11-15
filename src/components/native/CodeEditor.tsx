@@ -9,8 +9,9 @@ import CodeEditorAppTopBar from '../organisms/CodeEditorAppTopBar'
 import useFS from '@/hooks/useFS'
 import Console from './Console'
 import { WindowRemoveTab, WindowAddTab } from '@/store/actions'
-import { verifyIfIsFile, uuid, verifyIfIsObject } from '@/utils/file'
+import { verifyIfIsFile, uuid, verifyIfIsObject, getExtension } from '@/utils/file'
 import useStore from '@/hooks/useStore'
+import { json } from 'stream/consumers'
 const CodeEditor = ({
   tab,
   window,
@@ -29,9 +30,9 @@ const CodeEditor = ({
   const [currentDirectory, setCurrentDirectory] = React.useState<string>('/');
   const [DirectoryHistory, setDirectoryHistory] = React.useState<string[]>([]);
 
-  console.log = (message: string, ...optionalParams: any[]) => {
-    setCommandHistory([...CommandHistory, message]);
-  }
+  // console.log = (message: string, ...optionalParams: any[]) => {
+  //   setCommandHistory([...CommandHistory, message]);
+  // }
 
 
   const availableCommands: string[] = [
@@ -530,6 +531,7 @@ const CodeEditor = ({
   }, [CommandHistory, input]);
 
 
+  const [language, setLanguage] = React.useState('javascript');
 
   useEffect(() => {
     if (monaco) {
@@ -539,17 +541,41 @@ const CodeEditor = ({
 
 
   useEffect(() => {
+    const extension = getExtension(tab?.extension || tab?.value || tab?.title || tab?.ficTitle || 'js')
+    if(getExtension(extension) === 'js'){
+      setLanguage('javascript')
+    }
+    if(getExtension(extension) === 'ts'){
+      setLanguage('typescript')
+    }
+    if(getExtension(extension) === 'css'){
+      setLanguage('css')
+    }
+    if(getExtension(extension) === 'html'){
+      setLanguage('html')
+    }
+    if(getExtension(extension) === 'json'){
+      setLanguage('json')
+    }
+  },[])
+
+
+  useEffect(() => {
+  if(tab.value){
     fs?.readFile(`${tab.value}`, 'utf8', (err, data) => {
       if (err) throw err
       if (data) {
+        
         setCode(data)
       }
     })
+  }
   }, [monaco, fs])
 
 
 
   const handlerExecute = () => {
+    console.log("executing code...")
     eval(code)
   }
 
@@ -567,7 +593,13 @@ const CodeEditor = ({
           onExecute={handlerExecute}
           filename={tab.ficTitle || ''}
           onSave={(filename) => {
-            fs?.writeFile(`/Desktop/${filename}`, code, (err) => { err && console.log(err) })
+            fs?.writeFile(`/Desktop/${filename}`, code, (err) => {
+              if(err){
+                console.log(err)
+              }else{
+                console.log(filename, ' saved')
+              }
+            })
           }}
         />
         <div
@@ -578,8 +610,8 @@ const CodeEditor = ({
             <Editor
               height="100%"
               width={'100%'}
-              defaultLanguage="javascript"
               theme="vs-dark"
+              language={language}
               options={{
                 autoIndent: 'full',
                 contextmenu: true,

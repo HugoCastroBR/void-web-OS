@@ -61,7 +61,34 @@ const BottomTask = ({
           return (
             <span className='i-mdi-image text-white text-xl' ></span>
           )
-  
+        case 'html':
+          return (
+            <span className='i-mdi-html5 text-white text-xl' ></span>
+          )
+        case 'js':
+          return (
+            <span className='i-mdi-language-javascript text-white text-xl' ></span>
+          )
+        case 'ts':
+          return (
+            <span className='i-mdi-language-typescript text-white text-xl' ></span>
+          )
+        case 'css':
+          return (
+            <span className='i-mdi-language-css3 text-white text-xl' ></span>
+          )
+        case 'json':
+          return (
+            <span className='i-mdi-json text-white text-xl' ></span>
+          )
+        case 'md':
+          return (
+            <span className='i-mdi-markdown text-white text-xl' ></span>
+          )
+        case 'pdf':
+          return (
+            <span className='i-mdi-file-pdf text-white text-xl' ></span>
+          )
         default:
           return (
             <span className='i-mdi-file text-white text-xl' ></span>
