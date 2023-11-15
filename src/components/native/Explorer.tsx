@@ -64,6 +64,7 @@ const Explorer = ({
   }, [fs, currentPath,states.Mouse])
 
   const uploadFileToDesktop = (fileName: string, fileContent: string) => {
+    console.log(fileName)
     const desktopPath = '/Desktop';
   
   
@@ -124,6 +125,16 @@ const Explorer = ({
                     Reload()
                   }
                   if(file.type === 'image/png' || file.type === 'image/jpeg' || file.type === 'image/jpg' || file.type === 'image/gif') {
+                    const fileContent = await file.arrayBuffer()
+                    const fileContentBase64 = Buffer.from(fileContent).toString('base64')
+                    uploadFileToDesktop(file.name, fileContentBase64)
+                  }if(file.type === 'application/pdf'){
+                    const fileContent = await file.arrayBuffer()
+                    const fileContentBase64 = Buffer.from(fileContent).toString('base64')
+                    uploadFileToDesktop(file.name, fileContentBase64)
+                  }
+                  else{
+                    console.log('not supported')
                     const fileContent = await file.arrayBuffer()
                     const fileContentBase64 = Buffer.from(fileContent).toString('base64')
                     uploadFileToDesktop(file.name, fileContentBase64)

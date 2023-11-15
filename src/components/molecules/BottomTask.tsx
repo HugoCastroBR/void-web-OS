@@ -124,6 +124,10 @@ const BottomTask = ({
           return (
             <span className='i-mdi-format-text text-white text-xl' ></span>
           )
+        case 'PDF Reader':
+          return (
+            <span className='i-mdi-file-pdf text-white text-xl' ></span>
+          )
         default:
           return (
             <span className='i-mdi-folder-open text-white text-xl' ></span>

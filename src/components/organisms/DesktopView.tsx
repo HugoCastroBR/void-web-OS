@@ -21,6 +21,7 @@ import ImageReader from '../native/ImageReader'
 import CodeEditor from '../native/CodeEditor'
 import VoidBrowser from '../native/VoidBrowser'
 import RichTextEditor from '../native/RichTextEditor'
+import PdfReader from '../native/PdfReader'
 const DesktopView = () => {
 
   const {states, dispatch} = useStore()
@@ -174,6 +175,18 @@ const DesktopView = () => {
             if(tab.title === 'Rich Text Editor'){
               return (
                 <RichTextEditor
+                  path={tab?.value || '/'}
+                  tab={tab}
+                  key={index}
+                  window={window}
+                />
+              )
+            }
+          }
+          {
+            if(tab.title === 'PDF Reader'){
+              return (
+                <PdfReader
                   path={tab?.value || '/'}
                   tab={tab}
                   key={index}

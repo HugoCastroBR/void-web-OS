@@ -449,6 +449,25 @@ const CodeEditor = ({
       }
     },
     {
+      command: 'js',
+      description: 'Run a javascript file',
+      callback: ({ params }) => {
+        const [fileToRun] = params;
+        fs?.readFile(`${currentDirectory}/${fileToRun}`, 'utf8', (err, data) => {
+          if (err) throw err
+          if (data) {
+            try {
+              const result = eval(data);
+              console.log(`%c${result}`, 'color: green');
+              setCommandHistory([...CommandHistory, result]);
+            } catch (error) {
+              console.log(`%cError: ${error}`, 'color: red');
+            }
+          }
+        })
+      }
+    },
+    {
       command: 'clear',
       description: 'Clear the console',
       callback: () => {
@@ -489,7 +508,8 @@ const CodeEditor = ({
           'echo - Print a message in the console',
           'ping - Ping a website',
           'wget - Download a file',
-          'code - Open the code editor'
+          'code - Open the code editor',
+          'js - Run a javascript file',
         ]);
       }
     },

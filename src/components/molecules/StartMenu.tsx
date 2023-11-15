@@ -94,7 +94,6 @@ const StartMenu = () => {
                     width: '100%',
                     borderRadius: '0px',
                     backdropFilter: 'blur(10px)',
-
                   }
                 }}
               >

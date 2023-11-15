@@ -133,3 +133,7 @@ export type VoidBrowserProps = nativeWindowProps & {
 export type RichTextEditorProps = nativeWindowProps & {
   path: string
 }
+
+export type PdfReaderProps = nativeWindowProps & {
+  path: string
+}

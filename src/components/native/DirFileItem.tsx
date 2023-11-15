@@ -114,6 +114,20 @@ const DirFileItem = ({
               }
             }))
           }
+          if(extension === 'pdf'){
+            dispatch(WindowAddTab({
+              title: 'PDF Reader',
+              tab: {
+                uuid: uuid(6),
+                title: 'PDF Reader',
+                ficTitle: title,
+                maximized: false,
+                minimized: false,
+                value: path,
+                extension: extension
+              }
+            }))
+          }
           if(CodeExtension.includes(extension)){
             dispatch(WindowAddTab({
               title: 'Code Editor',
